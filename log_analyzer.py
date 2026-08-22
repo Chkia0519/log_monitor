@@ -1,10 +1,12 @@
+import sys
+
 try:
     with open("system.log", "r", encoding="utf-8") as file:
         logs = file.readlines()
 
 except FileNotFoundError:
     print("找不到 system.log，請確認 Log 檔案是否存在")
-    exit()
+    sys.exit()
 
 # Log 分級計數器
 info_count = 0
