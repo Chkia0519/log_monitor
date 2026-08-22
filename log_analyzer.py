@@ -24,10 +24,19 @@ print("ERROR 數量：", error_count)
 
 if error_count > 0:
     print(f"\n系統存在 {error_count} 筆異常")
-    print("ERROR 紀錄：")
-
-    for error in error_logs:
-        print(error)
-
 else:
     print("系統目前無 ERROR")
+    
+keyword = input("\n請輸入要搜尋的關鍵字：")
+
+search_count = 0
+
+for log in logs:
+    if keyword in log:
+        print(log.strip())
+        search_count += 1
+
+if search_count == 0:
+    print("查無符合的 Log 紀錄")
+else:
+    print(f"\n共找到 {search_count} 筆紀錄")
