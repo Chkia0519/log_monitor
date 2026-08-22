@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime,timedelta
 
 try:
     with open("system.log", "r", encoding="utf-8") as file:
@@ -7,6 +8,26 @@ try:
 except FileNotFoundError:
     print("找不到 system.log，請確認 Log 檔案是否存在")
     sys.exit()
+    
+#篩選最近10分鐘log    
+recent_logs = []
+
+ten_minutes_ago = datetime.now() - timedelta(minutes=10)
+
+for log in logs:
+    try:
+        time_text = log.split(" - ")[0]
+
+        log_time = datetime.strptime(
+            time_text,
+            "%Y-%m-%d %H:%M:%S,%f"
+        )
+
+        if log_time >= ten_minutes_ago:
+            recent_logs.append(log)
+
+    except ValueError:
+        continue
 
 # Log 分級計數器
 info_count = 0
@@ -15,7 +36,7 @@ error_count = 0
 critical_count = 0 
 
 
-for log in logs:
+for log in recent_logs:
     if "INFO" in log:
         info_count += 1
 
@@ -56,23 +77,27 @@ else:
 abnormal_count = error_count + critical_count    
     
 if abnormal_count > 0:
-    print(f"\n系統存在 {error_count} 筆異常")
+    print(f"\n系統存在 {abnormal_count} 筆重大異常")
+    
+    # 關鍵字搜尋
+
+    keyword = input("\n請輸入要搜尋的關鍵字(如毋須查詢請輸入：q)：")
+    if keyword != 'q' :
+        search_count = 0
+        
+        for log in recent_logs:
+            if keyword in log:
+                print(log.strip())
+                search_count += 1
+        
+        if search_count == 0:
+            print("查無符合的 Log 紀錄")
+        else:
+            print(f"\n共找到 {search_count} 筆紀錄")
+            
+    else:
+        sys.exit()
 else:
     print("系統目前無重大異常")
     
     
-# 關鍵字搜尋
-
-keyword = input("\n請輸入要搜尋的關鍵字：")
-
-search_count = 0
-
-for log in logs:
-    if keyword in log:
-        print(log.strip())
-        search_count += 1
-
-if search_count == 0:
-    print("查無符合的 Log 紀錄")
-else:
-    print(f"\n共找到 {search_count} 筆紀錄")
