@@ -5,6 +5,8 @@ info_count = 0
 warning_count = 0
 error_count = 0
 
+error_logs = []
+
 for log in logs:
     if "INFO" in log:
         info_count += 1
@@ -13,7 +15,8 @@ for log in logs:
         warning_count += 1
 
     elif "ERROR" in log:
-        error_count += 1    
+        error_count += 1
+        error_logs.append(log.strip())
 
 print("INFO 數量：", info_count)
 print("WARNING 數量：", warning_count)
@@ -23,9 +26,8 @@ if error_count > 0:
     print(f"\n系統存在 {error_count} 筆異常")
     print("ERROR 紀錄：")
 
-    for log in logs:
-        if "ERROR" in log:
-            print(log.strip())
-            
+    for error in error_logs:
+        print(error)
+
 else:
     print("系統目前無 ERROR")
