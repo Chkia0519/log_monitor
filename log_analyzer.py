@@ -1,11 +1,17 @@
-with open("system.log", "r", encoding="utf-8") as file:
-    logs = file.readlines()
+try:
+    with open("system.log", "r", encoding="utf-8") as file:
+        logs = file.readlines()
 
+except FileNotFoundError:
+    print("找不到 system.log，請確認 Log 檔案是否存在")
+    exit()
+
+# Log 分級計數器
 info_count = 0
 warning_count = 0
 error_count = 0
+critical_count = 0 
 
-error_logs = []
 
 for log in logs:
     if "INFO" in log:
@@ -16,17 +22,45 @@ for log in logs:
 
     elif "ERROR" in log:
         error_count += 1
-        error_logs.append(log.strip())
+        
+    elif "CRITICAL" in log:
+        critical_count += 1
+        
 
 print("INFO 數量：", info_count)
 print("WARNING 數量：", warning_count)
 print("ERROR 數量：", error_count)
+print("CRITICAL 數量：", critical_count)
 
-if error_count > 0:
+
+
+# 判斷 Log 等級
+
+if critical_count > 0:
+    print("Log 狀態：嚴重異常")
+
+elif error_count > 0:
+    print("Log 狀態：異常")
+
+elif warning_count > 0:
+    print("Log 狀態：警告")
+
+else:
+    print("Log 狀態：正常")
+
+    
+# 計算重大異常總數
+
+abnormal_count = error_count + critical_count    
+    
+if abnormal_count > 0:
     print(f"\n系統存在 {error_count} 筆異常")
 else:
-    print("系統目前無 ERROR")
+    print("系統目前無重大異常")
     
+    
+# 關鍵字搜尋
+
 keyword = input("\n請輸入要搜尋的關鍵字：")
 
 search_count = 0
