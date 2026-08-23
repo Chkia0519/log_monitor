@@ -1,15 +1,19 @@
 import time
 
-
+#LOG檔名
 LOG_FILE = "system.log"
+
+#監測秒數
 CHECK_INTERVAL = 3
 
 def read_logs():
     with open(LOG_FILE, "r", encoding="utf-8") as file:
         return file.readlines()
 
+#所有的Log
 logs = read_logs()
 
+#已處理的Log數量
 processed_count = len(logs)
 
 print("開始監控 system.log...")
