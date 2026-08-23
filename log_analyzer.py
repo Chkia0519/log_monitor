@@ -1,6 +1,9 @@
 import sys
 from datetime import datetime,timedelta
 
+#可依需求更動偵測分鐘數
+minute=2
+
 try:
     with open("system.log", "r", encoding="utf-8") as file:
         logs = file.readlines()
@@ -9,10 +12,10 @@ except FileNotFoundError:
     print("找不到 system.log，請確認 Log 檔案是否存在")
     sys.exit()
     
-#篩選最近10分鐘log    
+#篩選最近指定分鐘log    
 recent_logs = []
 
-ten_minutes_ago = datetime.now() - timedelta(minutes=10)
+ten_minutes_ago = datetime.now() - timedelta(minutes=minute)
 
 for log in logs:
     try:
